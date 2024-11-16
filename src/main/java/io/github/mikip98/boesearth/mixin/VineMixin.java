@@ -13,8 +13,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -61,14 +62,20 @@ public abstract class VineMixin extends Block {
         cir.setReturnValue(currentState.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
     }
 
-    @Inject(at = @At("TAIL"), method = "randomTick")
+    @Inject(at = @At("RETURN"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
         boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
         world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
     }
 
+    @Inject(at = @At("HEAD"), method = "getStateForNeighborUpdate")
+    private void updateStateOnNeighborChange(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
+        boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
+        world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves), 2);
+    }
+
     @Unique
-    private static boolean supportedOnLeaves(BlockState state, World world, BlockPos pos) {
+    private static boolean supportedOnLeaves(BlockState state, WorldAccess world, BlockPos pos) {
         boolean isOnBlock = false;
         boolean isOnLeaves = false;
 
@@ -109,7 +116,7 @@ public abstract class VineMixin extends Block {
         return isOnLeaves && !isOnBlock;
     }
     @Unique
-    private static boolean checkIfOnBlock(BlockState state, World world, BlockPos pos) {
+    private static boolean checkIfOnBlock(BlockState state, WorldAccess world, BlockPos pos) {
         if (state == null) return false;
         return (!state.isIn(BlockTags.LEAVES)
                         && !state.isAir()
