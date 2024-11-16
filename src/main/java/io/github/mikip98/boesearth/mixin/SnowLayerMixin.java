@@ -44,7 +44,7 @@ public abstract class SnowLayerMixin extends Block {
         cir.setReturnValue(cir.getReturnValue().with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
     }
 
-    @Inject(at = @At("TAIL"), method = "randomTick")
+    @Inject(at = @At("HEAD"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
         if (!state.get(IsOnLeaves.IS_ON_LEAVES)) {
             boolean isOnLeaves = checkIfOnLeaves(world, pos);
