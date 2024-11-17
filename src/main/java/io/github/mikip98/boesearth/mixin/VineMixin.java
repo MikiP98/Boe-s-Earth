@@ -2,6 +2,7 @@ package io.github.mikip98.boesearth.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mikip98.boesearth.blockstates.IsOnLeaves;
+import io.github.mikip98.boesearth.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConnectingBlock;
@@ -55,23 +56,35 @@ public abstract class VineMixin extends Block {
 
     @Inject(at = @At("RETURN"), method = "getPlacementState", cancellable = true)
     private void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        BlockState currentState = cir.getReturnValue();
-        if (currentState == null) return;
+        if (ModConfig.vinesOnLeavesBlockstate) {
+            BlockState currentState = cir.getReturnValue();
+            if (currentState == null) return;
 
-        boolean supportedOnLeaves = supportedOnLeaves(currentState, ctx.getWorld(), ctx.getBlockPos());
-        cir.setReturnValue(currentState.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
+            boolean supportedOnLeaves = supportedOnLeaves(currentState, ctx.getWorld(), ctx.getBlockPos());
+            cir.setReturnValue(currentState.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
+        }
     }
 
     @Inject(at = @At("RETURN"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
-        world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
+        if (ModConfig.correctVinesWithTime) {
+            if (ModConfig.vinesOnLeavesBlockstate) {
+                boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
+                world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));
+            } else {
+                world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false));
+            }
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "getStateForNeighborUpdate")
     private void updateStateOnNeighborChange(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
-        boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
-        world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves), 2);
+        if (ModConfig.vinesOnLeavesBlockstate) {
+            boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
+            world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves), 2);
+        } else {
+            world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false), 2);
+        }
     }
 
     @Unique
@@ -84,36 +97,36 @@ public abstract class VineMixin extends Block {
             isOnBlock = checkIfOnBlock(blockNorth, world, pos.north());
             isOnLeaves = checkIfOnLeaves(blockNorth);
         }
-        if (!isOnBlock) {
+        if (!isOnBlock || ModConfig.VinePrioritiseLeaves) {
             if (state.get(EAST)) {
                 BlockState blockEast = world.getBlockState(pos.east());
-                isOnBlock = checkIfOnBlock(blockEast, world, pos.east());
+                isOnBlock |= checkIfOnBlock(blockEast, world, pos.east());
                 isOnLeaves |= checkIfOnLeaves(blockEast);
             }
         }
-        if (!isOnBlock) {
+        if (!isOnBlock || ModConfig.VinePrioritiseLeaves) {
             if (state.get(SOUTH)) {
                 BlockState blockSouth = world.getBlockState(pos.south());
-                isOnBlock = checkIfOnBlock(blockSouth, world, pos.south());
-                isOnLeaves = checkIfOnLeaves(blockSouth);
+                isOnBlock |= checkIfOnBlock(blockSouth, world, pos.south());
+                isOnLeaves |= checkIfOnLeaves(blockSouth);
             }
         }
-        if (!isOnBlock) {
+        if (!isOnBlock || ModConfig.VinePrioritiseLeaves) {
             if (state.get(WEST)) {
                 BlockState blockWest = world.getBlockState(pos.west());
-                isOnBlock = checkIfOnBlock(blockWest, world, pos.west());
-                isOnLeaves = checkIfOnLeaves(blockWest);
+                isOnBlock |= checkIfOnBlock(blockWest, world, pos.west());
+                isOnLeaves |= checkIfOnLeaves(blockWest);
             }
         }
 
-        if (!isOnBlock) {
+        if (!isOnBlock || ModConfig.VinePrioritiseLeaves) {
             if (!isOnLeaves) {
                 BlockState blockUp = world.getBlockState(pos.up());
-                isOnLeaves = blockUp.getProperties().contains(IsOnLeaves.IS_ON_LEAVES) && blockUp.get(IsOnLeaves.IS_ON_LEAVES);
+                isOnLeaves = blockUp.getOrEmpty(IsOnLeaves.IS_ON_LEAVES).orElse(false);
             }
         }
 
-        return isOnLeaves && !isOnBlock;
+        return isOnLeaves && !(isOnBlock && !ModConfig.VinePrioritiseLeaves);
     }
     @Unique
     private static boolean checkIfOnBlock(BlockState state, WorldAccess world, BlockPos pos) {

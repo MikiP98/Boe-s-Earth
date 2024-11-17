@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"io.github.mikip98.boesearth.BoesEarthClient"
+		],
+		"modmenu": [
+			"io.github.mikip98.boesearth.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [

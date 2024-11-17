@@ -2,6 +2,7 @@ package io.github.mikip98.boesearth.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mikip98.boesearth.blockstates.IsOnLeaves;
+import io.github.mikip98.boesearth.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SnowBlock;
@@ -21,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SnowBlock.class)
 public abstract class SnowLayerMixin extends Block {
-    /// WHY?!
     public SnowLayerMixin(Settings settings) {
         super(settings);
     }
@@ -40,15 +40,21 @@ public abstract class SnowLayerMixin extends Block {
 
     @Inject(at = @At("RETURN"), method = "getPlacementState", cancellable = true)
     private void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        boolean isOnLeaves = checkIfOnLeaves(ctx.getWorld(), ctx.getBlockPos());
-        cir.setReturnValue(cir.getReturnValue().with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+        if (ModConfig.snowOnLeavesBlockstate) {
+            boolean isOnLeaves = checkIfOnLeaves(ctx.getWorld(), ctx.getBlockPos());
+            cir.setReturnValue(cir.getReturnValue().with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (!state.get(IsOnLeaves.IS_ON_LEAVES)) {
-            boolean isOnLeaves = checkIfOnLeaves(world, pos);
-            world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+        if (ModConfig.correctSnowWithTime && !state.get(IsOnLeaves.IS_ON_LEAVES)) {
+            if (ModConfig.snowOnLeavesBlockstate) {
+                boolean isOnLeaves = checkIfOnLeaves(world, pos);
+                world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+            } else {
+                world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false));
+            }
         }
     }
 
@@ -58,9 +64,7 @@ public abstract class SnowLayerMixin extends Block {
         boolean isOnLeaves = blockBelow.isIn(BlockTags.LEAVES);
 
         if (!isOnLeaves) {
-            if (blockBelow.getProperties().contains(IsOnLeaves.IS_ON_LEAVES)) {
-                isOnLeaves = blockBelow.get(IsOnLeaves.IS_ON_LEAVES);
-            }
+            isOnLeaves = blockBelow.getOrEmpty(IsOnLeaves.IS_ON_LEAVES).orElse(false);
         }
 
         return isOnLeaves;

@@ -1,5 +1,6 @@
 package io.github.mikip98.boesearth;
 
+import io.github.mikip98.boesearth.config.ConfigReader;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class BoesEarth implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		ConfigReader.readConfigFromFile();
 		LOGGER.info("Boe's Earth is initialized!");
 	}
 }
