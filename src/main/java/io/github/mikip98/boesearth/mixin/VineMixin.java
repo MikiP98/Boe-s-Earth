@@ -3,10 +3,7 @@ package io.github.mikip98.boesearth.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mikip98.boesearth.blockstates.IsOnLeaves;
 import io.github.mikip98.boesearth.config.ModConfig;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ConnectingBlock;
-import net.minecraft.block.VineBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.tag.BlockTags;
@@ -131,7 +128,7 @@ public abstract class VineMixin extends Block {
     @Unique
     private static boolean checkIfOnBlock(BlockState state, WorldAccess world, BlockPos pos) {
         if (state == null) return false;
-        return (!state.isIn(BlockTags.LEAVES)
+        return (!(state.isIn(BlockTags.LEAVES) || state.getBlock() instanceof LeavesBlock)
                         && !state.isAir()
                         && (state.isFullCube(world, pos) && !(state.getProperties().contains(IsOnLeaves.IS_ON_LEAVES) && state.get(IsOnLeaves.IS_ON_LEAVES)))
                         && !(state.canPathfindThrough(world, pos, NavigationType.AIR) || state.canPathfindThrough(world, pos, NavigationType.WATER) || state.canPathfindThrough(world, pos, NavigationType.LAND))

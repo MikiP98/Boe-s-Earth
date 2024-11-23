@@ -28,17 +28,14 @@ public class ConfigReader {
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "snowOnLeavesBlockstate");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "vinesOnLeavesBlockstate");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "carpetOnLeavesBlockstate");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "defaultLeavesWithSnowOnTopBlockstate");
+
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctSnowWithTime");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctVinesWithTime");
-                    needsUpdating |= tryLoad(configJson, element -> gson.fromJson(element, VinePriority.class), "vinePriority");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctLeavesWithTime");
 
-//                    String mode = configJson.get("containDropMode").getAsString();
-//                    try {
-//                        ModConfig.containDropMode = ContainDropMode.valueOf(mode);
-//                    } catch (IllegalArgumentException e) {
-//                        LOGGER.warn("Invalid containDropMode value: {}, setting to default: {}", mode, DefaultConfig.dContainDropMode);
-//                        needsUpdating = true;
-//                    }
+                    needsUpdating |= tryLoad(configJson, element -> gson.fromJson(element, VinePriority.class), "vinePriority");
+                    ModConfig.VinePrioritiseLeaves = ModConfig.vinePriority == VinePriority.LEAVES;
                 }
 
                 if (needsUpdating) {

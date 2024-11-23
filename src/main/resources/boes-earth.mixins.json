@@ -7,6 +7,7 @@
 		"CarpetMixin",
 		"ExampleMixin",
 		"IrisDefineMixin",
+		"LeavesMixin",
 		"SnowLayerMixin",
 		"VineMixin"
 	],

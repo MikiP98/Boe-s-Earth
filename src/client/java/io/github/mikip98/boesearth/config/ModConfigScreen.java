@@ -39,22 +39,39 @@ public class ModConfigScreen {
                 .setSaveConsumer(value -> ModConfig.carpetOnLeavesBlockstate = value)
                 .build()
         );
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Enable Leaves with Snow on Top Blockstate"), ModConfig.leavesWithSnowOnTopBlockstate)
+                .setTooltip(Text.literal("Enables leaves with snow on top blockstate."))
+                .setDefaultValue(DefaultConfig.defaultLeavesWithSnowOnTopBlockstate)
+                .setSaveConsumer(value -> ModConfig.leavesWithSnowOnTopBlockstate = value)
+                .build()
+        );
+
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Text.literal("Correct Snow Blockstate with Time"), ModConfig.correctSnowWithTime)
-                .setTooltip(Text.literal("Corrects snow blockstate with time, increase `randomTickSpeed` speed up"))
+                .startBooleanToggle(Text.literal("Correct Snow & Carpets Blockstates with Time"), ModConfig.correctSnowAndCarpetsWithTime)
+                .setTooltip(Text.literal("Corrects snow and carpets blockstates with time, increase `randomTickSpeed` to speed up"))
                 .setDefaultValue(DefaultConfig.defaultCorrectSnowWithTime)
-                .setSaveConsumer(value -> ModConfig.correctSnowWithTime = value)
+                .setSaveConsumer(value -> ModConfig.correctSnowAndCarpetsWithTime = value)
                 .build()
         );
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Correct Vines Blockstate with Time"), ModConfig.correctVinesWithTime)
-                .setTooltip(Text.literal("Corrects vines blockstate with time, increase `randomTickSpeed` speed up"))
+                .setTooltip(Text.literal("Corrects vines blockstate with time, increase `randomTickSpeed` to speed up"))
                 .setDefaultValue(DefaultConfig.defaultCorrectVinesWithTime)
                 .setSaveConsumer(value -> ModConfig.correctVinesWithTime = value)
                 .build()
         );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Correct Leaves Blockstate with Time"), ModConfig.correctLeavesWithTime)
+                .setTooltip(Text.literal("Corrects leaves blockstate with time, increase `randomTickSpeed` to speed up"))
+                .setDefaultValue(DefaultConfig.defaultCorrectLeavesWithTime)
+                .setSaveConsumer(value -> ModConfig.correctLeavesWithTime = value)
+                .build()
+        );
+
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
                 .startEnumSelector(Text.literal("Vine Priority"), VinePriority.class, ModConfig.vinePriority)

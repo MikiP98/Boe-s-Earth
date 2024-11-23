@@ -21,8 +21,11 @@ public class ConfigSaver {
         configJson.addProperty("snowOnLeavesBlockstate", ModConfig.snowOnLeavesBlockstate);
         configJson.addProperty("vinesOnLeavesBlockstate", ModConfig.vinesOnLeavesBlockstate);
         configJson.addProperty("carpetOnLeavesBlockstate", ModConfig.carpetOnLeavesBlockstate);
-        configJson.addProperty("correctSnowWithTime", ModConfig.correctSnowWithTime);
+        configJson.addProperty("defaultLeavesWithSnowOnTopBlockstate", ModConfig.defaultLeavesWithSnowOnTopBlockstate);
+
+        configJson.addProperty("correctSnowWithTime", ModConfig.correctSnowAndCarpetsWithTime);
         configJson.addProperty("correctVinesWithTime", ModConfig.correctVinesWithTime);
+        configJson.addProperty("correctLeavesWithTime", ModConfig.correctLeavesWithTime);
 
         configJson.addProperty("vinePriority", ModConfig.vinePriority.toString());
 

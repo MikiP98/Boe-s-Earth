@@ -2,6 +2,7 @@ package io.github.mikip98.boesearth.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mikip98.boesearth.blockstates.IsOnLeaves;
+import io.github.mikip98.boesearth.blockstates.SnowOnTop;
 import io.github.mikip98.boesearth.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -43,15 +44,25 @@ public abstract class SnowLayerMixin extends Block {
         if (ModConfig.snowOnLeavesBlockstate) {
             boolean isOnLeaves = checkIfOnLeaves(ctx.getWorld(), ctx.getBlockPos());
             cir.setReturnValue(cir.getReturnValue().with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+
+            if (isOnLeaves) {
+                World world = ctx.getWorld();
+                BlockPos down = ctx.getBlockPos().down();
+                world.setBlockState(down, world.getBlockState(down).with(SnowOnTop.SNOW_ON_TOP, true));
+            }
         }
     }
 
     @Inject(at = @At("HEAD"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (ModConfig.correctSnowWithTime && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.snowOnLeavesBlockstate)) {
+        if (ModConfig.correctSnowAndCarpetsWithTime && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.snowOnLeavesBlockstate)) {
             if (ModConfig.snowOnLeavesBlockstate) {
                 boolean isOnLeaves = checkIfOnLeaves(world, pos);
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
+
+                if (isOnLeaves && ModConfig.correctLeavesWithTime) {
+                    world.setBlockState(pos.down(), state.with(SnowOnTop.SNOW_ON_TOP, true));
+                }
             } else {
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false));
             }
