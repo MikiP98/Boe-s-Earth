@@ -34,9 +34,9 @@ That does **not** mean Boe's Earth blockstates are incompatible with Optifine or
 Iris *(vanilla compatible)*:
 ```properties
 #ifdef BOES_EARTH_BLOCKSTATES
-block.56= minecraft:birch_leaves minecraft:acacia_leaves snow:is_on_leaves=true vine:is_on_leaves=true blue_carpet:is_on_leaves=true moss_carpet:is_on_leaves=true
+block.56=minecraft:birch_leaves minecraft:acacia_leaves snow:is_on_leaves=true vine:is_on_leaves=true blue_carpet:is_on_leaves=true moss_carpet:is_on_leaves=true
 #else
-block.56= minecraft:birch_leaves minecraft:acacia_leaves
+block.56=minecraft:birch_leaves minecraft:acacia_leaves
 #endif
 ```
 
