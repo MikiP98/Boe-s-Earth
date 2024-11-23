@@ -20,7 +20,7 @@ public class BoesEarth implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		ConfigReader.readConfigFromFile();
+		ConfigReader.loadConfigFromFile();
 		LOGGER.info("Boe's Earth is initialized!");
 	}
 }
