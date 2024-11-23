@@ -48,7 +48,7 @@ public abstract class SnowLayerMixin extends Block {
 
     @Inject(at = @At("HEAD"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (ModConfig.correctSnowWithTime && !state.get(IsOnLeaves.IS_ON_LEAVES)) {
+        if (ModConfig.correctSnowWithTime && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.snowOnLeavesBlockstate)) {
             if (ModConfig.snowOnLeavesBlockstate) {
                 boolean isOnLeaves = checkIfOnLeaves(world, pos);
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));

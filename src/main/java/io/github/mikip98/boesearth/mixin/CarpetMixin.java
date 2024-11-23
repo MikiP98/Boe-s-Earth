@@ -38,7 +38,7 @@ public class CarpetMixin extends BlockMixinForCarpetMixin {
 
     @Override
     public void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        if (ModConfig.snowOnLeavesBlockstate) {
+        if (ModConfig.carpetOnLeavesBlockstate) {
             boolean isOnLeaves = checkIfOnLeaves(ctx.getWorld(), ctx.getBlockPos());
             cir.setReturnValue(cir.getReturnValue().withIfExists(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
         }
