@@ -28,7 +28,8 @@ public class ConfigReader {
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "snowOnLeavesBlockstate");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "vinesOnLeavesBlockstate");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "carpetOnLeavesBlockstate");
-                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "defaultLeavesWithSnowOnTopBlockstate");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "leavesWithSnowOnTopBlockstate");
+                    ModConfig.isOnLeavesBlockstate = ModConfig.snowOnLeavesBlockstate && ModConfig.carpetOnLeavesBlockstate;
 
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctSnowWithTime");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctVinesWithTime");

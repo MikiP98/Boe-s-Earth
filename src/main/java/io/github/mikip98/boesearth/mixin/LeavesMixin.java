@@ -39,7 +39,7 @@ public class LeavesMixin extends Block implements Waterloggable {
     private void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
         BlockState above = ctx.getWorld().getBlockState(ctx.getBlockPos().up());
 
-        if (above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
+        if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
             ctx.getWorld().setBlockState(ctx.getBlockPos().up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
         }
 
@@ -52,13 +52,13 @@ public class LeavesMixin extends Block implements Waterloggable {
 
     @Inject(at = @At("RETURN"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        BlockState above = world.getBlockState(pos.up());
+        if (ModConfig.doRandomTickLeavesUpdates && !(state.get(SnowOnTop.SNOW_ON_TOP) && ModConfig.leavesWithSnowOnTopBlockstate)) {
+            BlockState above = world.getBlockState(pos.up());
 
-        if (above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.correctSnowAndCarpetsWithTime) {
-            world.setBlockState(pos.up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
-        }
+            if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
+                world.setBlockState(pos.up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
+            }
 
-        if (ModConfig.correctLeavesWithTime) {
             boolean isSnowOnTop = ModConfig.leavesWithSnowOnTopBlockstate && (above.isIn(BlockTags.SNOW) || above.getBlock() instanceof SnowBlock || above.getSoundGroup() == BlockSoundGroup.SNOW);
             world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, isSnowOnTop));
         }
@@ -66,7 +66,7 @@ public class LeavesMixin extends Block implements Waterloggable {
 
     @Inject(at = @At("RETURN"), method = "hasRandomTicks", cancellable = true)
     private void hasRandomTicks(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (ModConfig.correctLeavesWithTime) {
+        if (ModConfig.doRandomTickLeavesUpdates) {
             cir.setReturnValue(true);
         }
     }

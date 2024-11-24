@@ -45,23 +45,25 @@ public abstract class SnowLayerMixin extends Block {
             boolean isOnLeaves = checkIfOnLeaves(ctx.getWorld(), ctx.getBlockPos());
             cir.setReturnValue(cir.getReturnValue().with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
 
-            if (isOnLeaves) {
-                World world = ctx.getWorld();
-                BlockPos down = ctx.getBlockPos().down();
-                world.setBlockState(down, world.getBlockState(down).with(SnowOnTop.SNOW_ON_TOP, true));
+            World world = ctx.getWorld();
+            BlockPos down = ctx.getBlockPos().down();
+            BlockState below = world.getBlockState(down);
+            if (isOnLeaves && ModConfig.leavesWithSnowOnTopBlockstate && below.contains(SnowOnTop.SNOW_ON_TOP)) {
+                world.setBlockState(down, below.with(SnowOnTop.SNOW_ON_TOP, true));
             }
         }
     }
 
     @Inject(at = @At("HEAD"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (ModConfig.correctSnowAndCarpetsWithTime && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.snowOnLeavesBlockstate)) {
+        if (ModConfig.doRandomTickSnowUpdates && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.snowOnLeavesBlockstate)) {
             if (ModConfig.snowOnLeavesBlockstate) {
                 boolean isOnLeaves = checkIfOnLeaves(world, pos);
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves));
 
-                if (isOnLeaves && ModConfig.correctLeavesWithTime) {
-                    world.setBlockState(pos.down(), state.with(SnowOnTop.SNOW_ON_TOP, true));
+                BlockState below = world.getBlockState(pos.down());
+                if (isOnLeaves && ModConfig.leavesWithSnowOnTopBlockstate && below.contains(SnowOnTop.SNOW_ON_TOP)) {
+                    world.setBlockState(pos.down(), below.with(SnowOnTop.SNOW_ON_TOP, true));
                 }
             } else {
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false));

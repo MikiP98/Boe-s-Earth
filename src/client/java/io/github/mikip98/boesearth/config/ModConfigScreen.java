@@ -20,7 +20,10 @@ public class ModConfigScreen {
                 .startBooleanToggle(Text.literal("Enable Snow on Leaves Blockstate"), ModConfig.snowOnLeavesBlockstate)
                 .setTooltip(Text.literal("Enables snow on leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultSnowOnLeavesBlockstate)
-                .setSaveConsumer(value -> ModConfig.snowOnLeavesBlockstate = value)
+                .setSaveConsumer(value -> {
+                    ModConfig.snowOnLeavesBlockstate = value;
+                    ModConfig.isOnLeavesBlockstate = ModConfig.snowOnLeavesBlockstate && ModConfig.carpetOnLeavesBlockstate;
+                })
                 .build()
         );
 
@@ -36,7 +39,10 @@ public class ModConfigScreen {
                 .startBooleanToggle(Text.literal("Enable Carpet on Leaves Blockstate"), ModConfig.carpetOnLeavesBlockstate)
                 .setTooltip(Text.literal("Enables carpet on leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultCarpetOnLeavesBlockstate)
-                .setSaveConsumer(value -> ModConfig.carpetOnLeavesBlockstate = value)
+                .setSaveConsumer(value -> {
+                    ModConfig.carpetOnLeavesBlockstate = value;
+                    ModConfig.isOnLeavesBlockstate = ModConfig.snowOnLeavesBlockstate && ModConfig.carpetOnLeavesBlockstate;
+                })
                 .build()
         );
         rootCategory.addEntry(ConfigEntryBuilder.create()
@@ -49,26 +55,26 @@ public class ModConfigScreen {
 
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Text.literal("Correct Snow & Carpets Blockstates with Time"), ModConfig.correctSnowAndCarpetsWithTime)
-                .setTooltip(Text.literal("Corrects snow and carpets blockstates with time, increase `randomTickSpeed` to speed up"))
-                .setDefaultValue(DefaultConfig.defaultCorrectSnowWithTime)
-                .setSaveConsumer(value -> ModConfig.correctSnowAndCarpetsWithTime = value)
+                .startBooleanToggle(Text.literal("Update Snow Blockstate on random ticks"), ModConfig.doRandomTickSnowUpdates)
+                .setTooltip(Text.literal("Corrects snow blockstates with time, increase `randomTickSpeed` to speed up\nIt can also update leaves if beneath snow"))
+                .setDefaultValue(DefaultConfig.defaultDoRandomTickSnowUpdates)
+                .setSaveConsumer(value -> ModConfig.doRandomTickSnowUpdates = value)
                 .build()
         );
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Text.literal("Correct Vines Blockstate with Time"), ModConfig.correctVinesWithTime)
-                .setTooltip(Text.literal("Corrects vines blockstate with time, increase `randomTickSpeed` to speed up"))
-                .setDefaultValue(DefaultConfig.defaultCorrectVinesWithTime)
-                .setSaveConsumer(value -> ModConfig.correctVinesWithTime = value)
+                .startBooleanToggle(Text.literal("Update Vine Blockstate on random ticks"), ModConfig.doRandomTickVineUpdates)
+                .setTooltip(Text.literal("Corrects vine blockstates with time, increase `randomTickSpeed` to speed up"))
+                .setDefaultValue(DefaultConfig.defaultDoRandomTickVineUpdates)
+                .setSaveConsumer(value -> ModConfig.doRandomTickVineUpdates = value)
                 .build()
         );
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Text.literal("Correct Leaves Blockstate with Time"), ModConfig.correctLeavesWithTime)
-                .setTooltip(Text.literal("Corrects leaves blockstate with time, increase `randomTickSpeed` to speed up"))
-                .setDefaultValue(DefaultConfig.defaultCorrectLeavesWithTime)
-                .setSaveConsumer(value -> ModConfig.correctLeavesWithTime = value)
+                .startBooleanToggle(Text.literal("Update Leaves Blockstate on random ticks"), ModConfig.doRandomTickLeavesUpdates)
+                .setTooltip(Text.literal("Corrects leaves blockstate with time, increase `randomTickSpeed` to speed up\nIt can also update snow and carpets if above leaves"))
+                .setDefaultValue(DefaultConfig.defaultDoRandomTickLeavesUpdates)
+                .setSaveConsumer(value -> ModConfig.doRandomTickLeavesUpdates = value)
                 .build()
         );
 

@@ -64,7 +64,7 @@ public abstract class VineMixin extends Block {
 
     @Inject(at = @At("RETURN"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (ModConfig.correctVinesWithTime && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.vinesOnLeavesBlockstate)) {
+        if (ModConfig.doRandomTickVineUpdates && !(state.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.vinesOnLeavesBlockstate)) {
             if (ModConfig.vinesOnLeavesBlockstate) {
                 boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves));

@@ -5,11 +5,12 @@ public class ModConfig extends DefaultConfig {
     public static boolean vinesOnLeavesBlockstate = defaultVinesOnLeavesBlockstate;
     public static boolean carpetOnLeavesBlockstate = defaultCarpetOnLeavesBlockstate;
     public static boolean leavesWithSnowOnTopBlockstate = defaultLeavesWithSnowOnTopBlockstate;
+    public static boolean isOnLeavesBlockstate = snowOnLeavesBlockstate && carpetOnLeavesBlockstate;
 
-    public static boolean correctSnowAndCarpetsWithTime = defaultCorrectSnowWithTime;
-    public static boolean correctVinesWithTime = defaultCorrectVinesWithTime;
-    public static boolean correctLeavesWithTime = defaultCorrectLeavesWithTime;
+    public static boolean doRandomTickSnowUpdates = defaultDoRandomTickSnowUpdates;
+    public static boolean doRandomTickVineUpdates = defaultDoRandomTickVineUpdates;
+    public static boolean doRandomTickLeavesUpdates = defaultDoRandomTickLeavesUpdates;
 
     public static VinePriority vinePriority = defaultVinePriority;
-    public static boolean VinePrioritiseLeaves = defaultVinePriority == VinePriority.LEAVES;
+    public static boolean VinePrioritiseLeaves = vinePriority == VinePriority.LEAVES;
 }
