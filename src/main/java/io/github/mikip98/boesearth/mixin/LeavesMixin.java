@@ -32,7 +32,8 @@ public class LeavesMixin extends Block implements Waterloggable {
     @Inject(at = @At("TAIL"), method = "<init>")
     private void correctDefaultState(CallbackInfo info) {
         LeavesBlock new_this = (LeavesBlock) (Object) this;
-        setDefaultState(new_this.getDefaultState().with(SnowOnTop.SNOW_ON_TOP, false));
+        // `.withIfExists` instead of `.with` for `Biomes'o Plenty` (`GlichCore`) compat (and probably more)
+        setDefaultState(new_this.getDefaultState().withIfExists(SnowOnTop.SNOW_ON_TOP, false));
     }
 
     @Inject(at = @At("RETURN"), method = "getPlacementState", cancellable = true)
