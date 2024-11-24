@@ -9,7 +9,7 @@ Those blockstates may be later used by shaders or resourcepacks to improve visua
 
 - `is_on_leaves`:
   Added to **Snow**, **Vines** and **Carpets**  
-  Example usage (Bliss shader):  
+  Example usage (Bliss shader):
   - Snow on top of waving leaves will wave alongside the leaves
   - Vines supported by/based on waving leaves will wave with them
 
