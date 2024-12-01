@@ -131,7 +131,7 @@ public abstract class VineMixin extends Block {
         return (!(state.isIn(BlockTags.LEAVES) || state.getBlock() instanceof LeavesBlock)
                         && !state.isAir()
                         && (state.isFullCube(world, pos) && !(state.getProperties().contains(IsOnLeaves.IS_ON_LEAVES) && state.get(IsOnLeaves.IS_ON_LEAVES)))
-                        && !(state.canPathfindThrough(world, pos, NavigationType.AIR) || state.canPathfindThrough(world, pos, NavigationType.WATER) || state.canPathfindThrough(world, pos, NavigationType.LAND))
+                        && !(state.canPathfindThrough(NavigationType.AIR) || state.canPathfindThrough(NavigationType.WATER) || state.canPathfindThrough(NavigationType.LAND))
         );
     }
     @Unique
