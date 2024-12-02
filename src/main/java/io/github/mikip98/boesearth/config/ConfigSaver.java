@@ -27,6 +27,14 @@ public class ConfigSaver {
         configJson.addProperty("correctVinesWithTime", ModConfig.doRandomTickVineUpdates);
         configJson.addProperty("correctLeavesWithTime", ModConfig.doRandomTickLeavesUpdates);
 
+        configJson.addProperty("updateSnowOnNeighborChange", ModConfig.updateSnowOnNeighborChange);
+        configJson.addProperty("updateVineOnNeighborChange", ModConfig.updateVineOnNeighborChange);
+        configJson.addProperty("updateLeavesOnNeighborChange", ModConfig.updateLeavesOnNeighborChange);
+        configJson.addProperty("updateLeavesOnNeighborChangeOnlyAbove", ModConfig.updateLeavesOnNeighborChangeOnlyAbove);
+        configJson.addProperty("maxSnowUpdateChain", ModConfig.maxSnowUpdateChain);
+        configJson.addProperty("maxVineUpdateChain", ModConfig.maxVineUpdateChain);
+        configJson.addProperty("maxLeavesUpdateChain", ModConfig.maxLeavesUpdateChain);
+
         configJson.addProperty("vinePriority", ModConfig.vinePriority.toString());
 
         configJson.addProperty("VinePrioritiseLeaves", ModConfig.VinePrioritiseLeaves);

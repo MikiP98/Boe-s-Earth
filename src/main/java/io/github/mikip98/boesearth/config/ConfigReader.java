@@ -35,6 +35,14 @@ public class ConfigReader {
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctVinesWithTime");
                     needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "correctLeavesWithTime");
 
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "updateSnowOnNeighborChange");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "updateVineOnNeighborChange");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "updateLeavesOnNeighborChange");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsBoolean, "updateLeavesOnNeighborChangeOnlyAbove");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsInt, "maxSnowUpdateChain");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsInt, "maxVineUpdateChain");
+                    needsUpdating |= tryLoad(configJson, JsonElement::getAsInt, "maxLeavesUpdateChain");
+
                     needsUpdating |= tryLoad(configJson, element -> gson.fromJson(element, VinePriority.class), "vinePriority");
                     ModConfig.VinePrioritiseLeaves = ModConfig.vinePriority == VinePriority.LEAVES;
                 }

@@ -78,6 +78,62 @@ public class ModConfigScreen {
                 .build()
         );
 
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Update Snow Blockstate on neighbor change"), ModConfig.updateSnowOnNeighborChange)
+                .setTooltip(Text.literal("Updates snow blockstates on neighbor change"))
+                .setDefaultValue(DefaultConfig.defaultUpdateSnowOnNeighborChange)
+                .setSaveConsumer(value -> ModConfig.updateSnowOnNeighborChange = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Update Vine Blockstate on neighbor change"), ModConfig.updateVineOnNeighborChange)
+                .setTooltip(Text.literal("Updates vine blockstates on neighbor change"))
+                .setDefaultValue(DefaultConfig.defaultUpdateVineOnNeighborChange)
+                .setSaveConsumer(value -> ModConfig.updateVineOnNeighborChange = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Update Leaves Blockstate on neighbor change"), ModConfig.updateLeavesOnNeighborChange)
+                .setTooltip(Text.literal("Updates leaves blockstates on neighbor change"))
+                .setDefaultValue(DefaultConfig.defaultUpdateLeavesOnNeighborChange)
+                .setSaveConsumer(value -> ModConfig.updateLeavesOnNeighborChange = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startBooleanToggle(Text.literal("Update Leaves Blockstate on neighbor change only above"), ModConfig.updateLeavesOnNeighborChangeOnlyAbove)
+                .setTooltip(Text.literal("Updates leaves blockstates on neighbor change only if above"))
+                .setDefaultValue(DefaultConfig.defaultUpdateLeavesOnNeighborChangeOnlyAbove)
+                .setSaveConsumer(value -> ModConfig.updateLeavesOnNeighborChangeOnlyAbove = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startIntSlider(Text.literal("Max Snow Update Chain"), ModConfig.maxSnowUpdateChain, 2, 512)
+                .setTooltip(Text.literal("Maximum update chain for snow blockstate."))
+                .setDefaultValue(DefaultConfig.defaultMaxSnowUpdateChain)
+                .setSaveConsumer(value -> ModConfig.maxSnowUpdateChain = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startIntSlider(Text.literal("Max Vine Update Chain"), ModConfig.maxVineUpdateChain, 2, 512)
+                .setTooltip(Text.literal("Maximum update chain for vine blockstate."))
+                .setDefaultValue(DefaultConfig.defaultMaxVineUpdateChain)
+                .setSaveConsumer(value -> ModConfig.maxVineUpdateChain = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startIntSlider(Text.literal("Max Leaves Update Chain"), ModConfig.maxLeavesUpdateChain, 2, 512)
+                .setTooltip(Text.literal("Maximum update chain for leaves blockstate."))
+                .setDefaultValue(DefaultConfig.defaultMaxLeavesUpdateChain)
+                .setSaveConsumer(value -> ModConfig.maxLeavesUpdateChain = value)
+                .build()
+        );
+
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
                 .startEnumSelector(Text.literal("Vine Priority"), VinePriority.class, ModConfig.vinePriority)

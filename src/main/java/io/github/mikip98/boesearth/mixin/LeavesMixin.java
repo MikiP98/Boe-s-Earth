@@ -11,8 +11,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -46,9 +49,15 @@ public class LeavesMixin extends Block implements Waterloggable {
 
         BlockState currentState = cir.getReturnValue();
 
-        boolean isSnowOnTop = ModConfig.leavesWithSnowOnTopBlockstate && (above.isIn(BlockTags.SNOW) || above.getBlock() instanceof SnowBlock || above.getSoundGroup() == BlockSoundGroup.SNOW);
-
+        boolean isSnowOnTop = checkIfSnowOnTop(above);
         cir.setReturnValue(currentState.with(SnowOnTop.SNOW_ON_TOP, isSnowOnTop));
+    }
+
+    @Inject(at = @At("RETURN"), method = "hasRandomTicks", cancellable = true)
+    private void hasRandomTicks(BlockState state, CallbackInfoReturnable<Boolean> cir) {
+        if (ModConfig.doRandomTickLeavesUpdates) {
+            cir.setReturnValue(true);
+        }
     }
 
     @Inject(at = @At("RETURN"), method = "randomTick")
@@ -60,15 +69,28 @@ public class LeavesMixin extends Block implements Waterloggable {
                 world.setBlockState(pos.up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
             }
 
-            boolean isSnowOnTop = ModConfig.leavesWithSnowOnTopBlockstate && (above.isIn(BlockTags.SNOW) || above.getBlock() instanceof SnowBlock || above.getSoundGroup() == BlockSoundGroup.SNOW);
+            boolean isSnowOnTop = checkIfSnowOnTop(above);
             world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, isSnowOnTop));
         }
     }
 
-    @Inject(at = @At("RETURN"), method = "hasRandomTicks", cancellable = true)
-    private void hasRandomTicks(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (ModConfig.doRandomTickLeavesUpdates) {
-            cir.setReturnValue(true);
+    @Inject(at = @At("HEAD"), method = "getStateForNeighborUpdate")
+    private void updateStateOnNeighborChange(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
+        if (ModConfig.updateLeavesOnNeighborChange && (!ModConfig.updateLeavesOnNeighborChangeOnlyAbove || Direction.UP == direction)) {
+            if (ModConfig.snowOnLeavesBlockstate) {
+                BlockState above = world.getBlockState(pos.up());
+                boolean isSnowOnTop = checkIfSnowOnTop(above);
+                if (state.get(SnowOnTop.SNOW_ON_TOP) != isSnowOnTop) {
+                    world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, isSnowOnTop), 3, ModConfig.maxLeavesUpdateChain);
+                }
+            } else if (state.get(SnowOnTop.SNOW_ON_TOP) && !ModConfig.leavesWithSnowOnTopBlockstate) {
+                world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, false), 3, ModConfig.maxLeavesUpdateChain);
+            }
         }
+    }
+
+    @Unique
+    private static boolean checkIfSnowOnTop(BlockState above) {
+        return ModConfig.leavesWithSnowOnTopBlockstate && (above.isIn(BlockTags.SNOW) || above.getBlock() instanceof SnowBlock || above.getSoundGroup() == BlockSoundGroup.SNOW);
     }
 }
