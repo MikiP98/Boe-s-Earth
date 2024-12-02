@@ -20,11 +20,20 @@ Those blockstates may be later used by shaders or resourcepacks to improve visua
 
 ## FAQ
 
-**Q:** *Snow/Vines are not waving*  
-**A:** *First make sure that your shader supports Boe's Earth, e.g. `Bliss`. Secondly, naturally generated blocks always have the custom blockstates disabled, they will however update with time. If you want to speed up the updating process, increase the `randomTickSpeed` gamerule, and decrease it back after to it's default `3`/`5`*
+**Q:** *Snow/Vines/Carpets are not waving*  
+**A:** *First make sure that your shader supports Boe's Earth, e.g. `Bliss`.   
+&nbsp;&nbsp;&nbsp;&nbsp; Then, make sure their respective blockstates are enabled in the config.  
+&nbsp;&nbsp;&nbsp;&nbsp; At last, naturally generated blocks always have the custom blockstates disabled, they will however update with time.   
+&nbsp;&nbsp;&nbsp;&nbsp; If you want to speed up the updating process, increase the `randomTickSpeed` gamerule, and decrease it back after to its default `3`/`5`*.  
+&nbsp;&nbsp;&nbsp;&nbsp; You can also force an update by placing/destroying the blocks
+
+**Q:** *There is a lot of lag caused by this mod*
+**A:** *You can disable some of the update logic in the config.  
+&nbsp;&nbsp;&nbsp;&nbsp; On neighbor update updates are the heavies one and can be tuned with max chain updates.  
+&nbsp;&nbsp;&nbsp;&nbsp; Random tick updates are the lighter and are connected to in-game `randomTickSpeed` gamerule*
 
 **Q:** *Forge version?*  
-**A:** *The mod should work with Syntra Connector, though that is not a guarantee in the future*
+**A:** *The mod should work with Sinytra Connector, though that is not a guarantee in the future*
 
 ## Documentation
 
