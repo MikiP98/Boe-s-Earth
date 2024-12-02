@@ -11,6 +11,14 @@ public class ModConfig extends DefaultConfig {
     public static boolean doRandomTickVineUpdates = defaultDoRandomTickVineUpdates;
     public static boolean doRandomTickLeavesUpdates = defaultDoRandomTickLeavesUpdates;
 
+    public static boolean updateSnowOnNeighborChange = defaultUpdateSnowOnNeighborChange;
+    public static boolean updateVineOnNeighborChange = defaultUpdateVineOnNeighborChange;
+    public static boolean updateLeavesOnNeighborChange = defaultUpdateLeavesOnNeighborChange;
+    public static boolean updateLeavesOnNeighborChangeOnlyAbove = defaultUpdateLeavesOnNeighborChangeOnlyAbove;
+    public static int maxSnowUpdateChain = defaultMaxSnowUpdateChain;
+    public static int maxVineUpdateChain = defaultMaxVineUpdateChain;
+    public static int maxLeavesUpdateChain = defaultMaxLeavesUpdateChain;
+
     public static VinePriority vinePriority = defaultVinePriority;
     public static boolean VinePrioritiseLeaves = vinePriority == VinePriority.LEAVES;
 }

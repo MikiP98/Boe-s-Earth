@@ -76,11 +76,15 @@ public abstract class VineMixin extends Block {
 
     @Inject(at = @At("HEAD"), method = "getStateForNeighborUpdate")
     private void updateStateOnNeighborChange(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
-        if (ModConfig.vinesOnLeavesBlockstate) {
-            boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
-            world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves), 2);
-        } else {
-            world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false), 2);
+        if (ModConfig.updateVineOnNeighborChange) {
+            if (ModConfig.vinesOnLeavesBlockstate) {
+                boolean supportedOnLeaves = supportedOnLeaves(state, world, pos);
+                if (state.get(IsOnLeaves.IS_ON_LEAVES) != supportedOnLeaves) {
+                    world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, supportedOnLeaves), 3, ModConfig.maxVineUpdateChain);
+                }
+            } else if (state.get(IsOnLeaves.IS_ON_LEAVES) && !ModConfig.vinesOnLeavesBlockstate) {
+                world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false), 3, ModConfig.maxVineUpdateChain);
+            }
         }
     }
 
