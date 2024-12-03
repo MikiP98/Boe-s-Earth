@@ -65,7 +65,7 @@ public class LeavesMixin extends Block implements Waterloggable {
         if (ModConfig.doRandomTickLeavesUpdates && !(state.get(SnowOnTop.SNOW_ON_TOP) && ModConfig.leavesWithSnowOnTopBlockstate)) {
             BlockState above = world.getBlockState(pos.up());
 
-            if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
+            if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.carpetOnLeavesBlockstate && ModConfig.snowOnLeavesBlockstate) {
                 world.setBlockState(pos.up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
             }
 

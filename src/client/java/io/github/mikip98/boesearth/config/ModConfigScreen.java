@@ -1,10 +1,13 @@
 package io.github.mikip98.boesearth.config;
 
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+
+import java.util.List;
 
 public class ModConfigScreen {
     public static Screen createScreen(Screen parentScreen) {
@@ -16,7 +19,10 @@ public class ModConfigScreen {
         // Create a root category
         ConfigCategory rootCategory = builder.getOrCreateCategory(Text.literal("General Settings"));
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+
+        List<AbstractConfigListEntry> blockstateToggles = new java.util.ArrayList<>();
+
+        blockstateToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Enable Snow on Leaves Blockstate"), ModConfig.snowOnLeavesBlockstate)
                 .setTooltip(Text.literal("Enables snow on leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultSnowOnLeavesBlockstate)
@@ -26,16 +32,14 @@ public class ModConfigScreen {
                 })
                 .build()
         );
-
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        blockstateToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Enable Vines on Leaves Blockstate"), ModConfig.vinesOnLeavesBlockstate)
                 .setTooltip(Text.literal("Enables vines on leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultVinesOnLeavesBlockstate)
                 .setSaveConsumer(value -> ModConfig.vinesOnLeavesBlockstate = value)
                 .build()
         );
-
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        blockstateToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Enable Carpet on Leaves Blockstate"), ModConfig.carpetOnLeavesBlockstate)
                 .setTooltip(Text.literal("Enables carpet on leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultCarpetOnLeavesBlockstate)
@@ -45,7 +49,7 @@ public class ModConfigScreen {
                 })
                 .build()
         );
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        blockstateToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Enable Leaves with Snow on Top Blockstate"), ModConfig.leavesWithSnowOnTopBlockstate)
                 .setTooltip(Text.literal("Enables leaves with snow on top blockstate."))
                 .setDefaultValue(DefaultConfig.defaultLeavesWithSnowOnTopBlockstate)
@@ -53,8 +57,15 @@ public class ModConfigScreen {
                 .build()
         );
 
-
         rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startSubCategory(Text.literal("Blockstate toggles"), blockstateToggles)
+                .build()
+        );
+
+
+        List<AbstractConfigListEntry> randomTickUpdatesToggles = new java.util.ArrayList<>();
+
+        randomTickUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Snow Blockstate on random ticks"), ModConfig.doRandomTickSnowUpdates)
                 .setTooltip(Text.literal("Corrects snow blockstates with time, increase `randomTickSpeed` to speed up\nIt can also update leaves if beneath snow"))
                 .setDefaultValue(DefaultConfig.defaultDoRandomTickSnowUpdates)
@@ -62,7 +73,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        randomTickUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Vine Blockstate on random ticks"), ModConfig.doRandomTickVineUpdates)
                 .setTooltip(Text.literal("Corrects vine blockstates with time, increase `randomTickSpeed` to speed up"))
                 .setDefaultValue(DefaultConfig.defaultDoRandomTickVineUpdates)
@@ -70,7 +81,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        randomTickUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Leaves Blockstate on random ticks"), ModConfig.doRandomTickLeavesUpdates)
                 .setTooltip(Text.literal("Corrects leaves blockstate with time, increase `randomTickSpeed` to speed up\nIt can also update snow and carpets if above leaves"))
                 .setDefaultValue(DefaultConfig.defaultDoRandomTickLeavesUpdates)
@@ -79,6 +90,14 @@ public class ModConfigScreen {
         );
 
         rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startSubCategory(Text.literal("Random tick updates toggles"), randomTickUpdatesToggles)
+                .build()
+        );
+
+
+        List<AbstractConfigListEntry> onNeighborChangeUpdatesToggles = new java.util.ArrayList<>();
+
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Snow Blockstate on neighbor change"), ModConfig.updateSnowOnNeighborChange)
                 .setTooltip(Text.literal("Updates snow blockstates on neighbor change"))
                 .setDefaultValue(DefaultConfig.defaultUpdateSnowOnNeighborChange)
@@ -86,7 +105,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Vine Blockstate on neighbor change"), ModConfig.updateVineOnNeighborChange)
                 .setTooltip(Text.literal("Updates vine blockstates on neighbor change"))
                 .setDefaultValue(DefaultConfig.defaultUpdateVineOnNeighborChange)
@@ -94,7 +113,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Leaves Blockstate on neighbor change"), ModConfig.updateLeavesOnNeighborChange)
                 .setTooltip(Text.literal("Updates leaves blockstates on neighbor change"))
                 .setDefaultValue(DefaultConfig.defaultUpdateLeavesOnNeighborChange)
@@ -102,7 +121,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startBooleanToggle(Text.literal("Update Leaves Blockstate on neighbor change only above"), ModConfig.updateLeavesOnNeighborChangeOnlyAbove)
                 .setTooltip(Text.literal("Updates leaves blockstates on neighbor change only if above"))
                 .setDefaultValue(DefaultConfig.defaultUpdateLeavesOnNeighborChangeOnlyAbove)
@@ -110,7 +129,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startIntSlider(Text.literal("Max Snow Update Chain"), ModConfig.maxSnowUpdateChain, 2, 512)
                 .setTooltip(Text.literal("Maximum update chain for snow blockstate."))
                 .setDefaultValue(DefaultConfig.defaultMaxSnowUpdateChain)
@@ -118,7 +137,7 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startIntSlider(Text.literal("Max Vine Update Chain"), ModConfig.maxVineUpdateChain, 2, 512)
                 .setTooltip(Text.literal("Maximum update chain for vine blockstate."))
                 .setDefaultValue(DefaultConfig.defaultMaxVineUpdateChain)
@@ -126,11 +145,16 @@ public class ModConfigScreen {
                 .build()
         );
 
-        rootCategory.addEntry(ConfigEntryBuilder.create()
+        onNeighborChangeUpdatesToggles.add(ConfigEntryBuilder.create()
                 .startIntSlider(Text.literal("Max Leaves Update Chain"), ModConfig.maxLeavesUpdateChain, 2, 512)
                 .setTooltip(Text.literal("Maximum update chain for leaves blockstate."))
                 .setDefaultValue(DefaultConfig.defaultMaxLeavesUpdateChain)
                 .setSaveConsumer(value -> ModConfig.maxLeavesUpdateChain = value)
+                .build()
+        );
+
+        rootCategory.addEntry(ConfigEntryBuilder.create()
+                .startSubCategory(Text.literal("On neighbor change updates settings"), onNeighborChangeUpdatesToggles)
                 .build()
         );
 
