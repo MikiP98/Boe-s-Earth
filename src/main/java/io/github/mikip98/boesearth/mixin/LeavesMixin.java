@@ -62,7 +62,7 @@ public class LeavesMixin extends Block implements Waterloggable {
 
     @Inject(at = @At("RETURN"), method = "randomTick")
     private void fixStateOnRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (ModConfig.doRandomTickLeavesUpdates) {  // && !(state.get(SnowOnTop.SNOW_ON_TOP) && ModConfig.leavesWithSnowOnTopBlockstate)
+        if (ModConfig.doRandomTickLeavesUpdates && !(state.get(SnowOnTop.SNOW_ON_TOP) && ModConfig.leavesWithSnowOnTopBlockstate)) {
             BlockState above = world.getBlockState(pos.up());
 
             if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES) && ModConfig.carpetOnLeavesBlockstate && ModConfig.snowOnLeavesBlockstate) {
