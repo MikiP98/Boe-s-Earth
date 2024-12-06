@@ -28,7 +28,7 @@ Those blockstates may be later used by shaders or resourcepacks to improve visua
 &nbsp;&nbsp;&nbsp;&nbsp; If you want to speed up the updating process, increase the `randomTickSpeed` gamerule, and decrease it back after to its default `3`/`5`*.  
 &nbsp;&nbsp;&nbsp;&nbsp; You can also force an update by placing/destroying the blocks
 
-**Q:** *There is a lot of lag caused by this mod*
+**Q:** *There is a lot of lag caused by this mod*  
 **A:** *You can disable some of the update logic in the config.  
 &nbsp;&nbsp;&nbsp;&nbsp; On neighbor update updates are the heavies one and can be tuned with max chain updates.  
 &nbsp;&nbsp;&nbsp;&nbsp; Random tick updates are the lighter and are connected to in-game `randomTickSpeed` gamerule*
@@ -54,6 +54,13 @@ block.56=minecraft:birch_leaves minecraft:acacia_leaves snow:is_on_leaves=true v
 #else
 block.56=minecraft:birch_leaves minecraft:acacia_leaves
 #endif
+```
+```properties
+#ifdef BOES_EARTH_BLOCKSTATES
+#define boes_on_leaves = snow:is_on_leaves=true vine:is_on_leaves=true blue_carpet:is_on_leaves=true moss_carpet:is_on_leaves=true
+#endif
+
+block.56=minecraft:birch_leaves minecraft:acacia_leaves boes_on_leaves
 ```
 
 Other shader loaders *(**not** vanilla compatible)*:
