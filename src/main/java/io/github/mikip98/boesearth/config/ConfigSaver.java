@@ -37,8 +37,6 @@ public class ConfigSaver {
 
         configJson.addProperty("vinePriority", ModConfig.vinePriority.toString());
 
-        configJson.addProperty("VinePrioritiseLeaves", ModConfig.VinePrioritiseLeaves);
-
         // Save the JSON object to a file
         try (FileWriter writer = new FileWriter(configFile)) {
             gson.toJson(configJson, writer);

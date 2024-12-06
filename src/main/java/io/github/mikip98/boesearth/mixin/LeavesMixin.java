@@ -13,6 +13,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,10 +42,11 @@ public class LeavesMixin extends Block implements Waterloggable {
 
     @Inject(at = @At("RETURN"), method = "getPlacementState", cancellable = true)
     private void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        BlockState above = ctx.getWorld().getBlockState(ctx.getBlockPos().up());
+        World world = ctx.getWorld();
+        BlockState above = world.getBlockState(ctx.getBlockPos().up());
 
         if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
-            ctx.getWorld().setBlockState(ctx.getBlockPos().up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
+            world.setBlockState(ctx.getBlockPos().up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
         }
 
         BlockState currentState = cir.getReturnValue();
@@ -82,6 +84,9 @@ public class LeavesMixin extends Block implements Waterloggable {
                 boolean isSnowOnTop = checkIfSnowOnTop(above);
                 if (state.get(SnowOnTop.SNOW_ON_TOP) != isSnowOnTop) {
                     world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, isSnowOnTop), 3, ModConfig.maxLeavesUpdateChain);
+                }
+                if (ModConfig.isOnLeavesBlockstate && above.contains(IsOnLeaves.IS_ON_LEAVES) && !above.get(IsOnLeaves.IS_ON_LEAVES)) {
+                    world.setBlockState(pos.up(), above.with(IsOnLeaves.IS_ON_LEAVES, true), 3);
                 }
             } else if (state.get(SnowOnTop.SNOW_ON_TOP) && !ModConfig.leavesWithSnowOnTopBlockstate) {
                 world.setBlockState(pos, state.with(SnowOnTop.SNOW_ON_TOP, false), 3, ModConfig.maxLeavesUpdateChain);

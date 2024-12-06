@@ -50,6 +50,7 @@ public abstract class SnowLayerMixin extends Block {
             World world = ctx.getWorld();
             BlockPos down = ctx.getBlockPos().down();
             BlockState below = world.getBlockState(down);
+
             if (isOnLeaves && ModConfig.leavesWithSnowOnTopBlockstate && below.contains(SnowOnTop.SNOW_ON_TOP) && !below.get(SnowOnTop.SNOW_ON_TOP)) {
                 world.setBlockState(down, below.with(SnowOnTop.SNOW_ON_TOP, true));
             }
@@ -80,6 +81,11 @@ public abstract class SnowLayerMixin extends Block {
                 boolean isOnLeaves = checkIfOnLeaves(world, pos);
                 if (state.get(IsOnLeaves.IS_ON_LEAVES) != isOnLeaves) {
                     world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, isOnLeaves), 3, ModConfig.maxSnowUpdateChain);
+                }
+
+                BlockState below = world.getBlockState(pos.down());
+                if (isOnLeaves && ModConfig.leavesWithSnowOnTopBlockstate && below.contains(SnowOnTop.SNOW_ON_TOP) && !below.get(SnowOnTop.SNOW_ON_TOP)) {
+                    world.setBlockState(pos.down(), below.with(SnowOnTop.SNOW_ON_TOP, true), 3, ModConfig.maxLeavesUpdateChain);
                 }
             } else if (state.get(IsOnLeaves.IS_ON_LEAVES) && !ModConfig.isOnLeavesBlockstate) {
                 world.setBlockState(pos, state.with(IsOnLeaves.IS_ON_LEAVES, false), 3, ModConfig.maxSnowUpdateChain);
