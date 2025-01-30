@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
-public abstract class BlockMixinForCarpetMixin {
+public abstract class BlockMixinBlockstateUnlocker {
     @Shadow
     private BlockState defaultState;
 

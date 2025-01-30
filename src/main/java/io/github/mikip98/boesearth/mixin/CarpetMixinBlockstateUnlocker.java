@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CarpetBlock.class)
-public class CarpetMixin extends BlockMixinForCarpetMixin {
+public class CarpetMixinBlockstateUnlocker extends BlockMixinBlockstateUnlocker {
     @Override
     public void addBlockState(CallbackInfo info, @Local(argsOnly = true) StateManager.Builder<Block, BlockState> builder) {
         builder.add(IsOnLeaves.IS_ON_LEAVES);

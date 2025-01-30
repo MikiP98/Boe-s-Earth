@@ -3,13 +3,16 @@
 	"package": "io.github.mikip98.boesearth.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"BlockMixinForCarpetMixin",
-		"CarpetMixin",
+		"BlockMixinBlockstateUnlocker",
+		"CarpetMixinBlockstateUnlocker",
 		"ExampleMixin",
+		"FlowableFluidMixin",
 		"IrisDefineMixin",
 		"LeavesMixin",
 		"SnowLayerMixin",
-		"VineMixin"
+		"VineMixin",
+		"WaterFluidMixin",
+		"WaterMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
