@@ -2,38 +2,26 @@ package io.github.mikip98.boesearth.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mikip98.boesearth.blockstates.DistanceToShore;
-import io.github.mikip98.boesearth.blockstates.IsOnLeaves;
-import io.github.mikip98.boesearth.blockstates.SnowOnTop;
-import io.github.mikip98.boesearth.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.apache.commons.compress.compressors.lz77support.LZ77Compressor;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Properties;
-
 @Mixin(FluidBlock.class)
 public class WaterMixin extends Block {
-    @Shadow @Final public static IntProperty LEVEL;
 
     public WaterMixin(Settings settings) { super(settings); }
 
@@ -49,16 +37,9 @@ public class WaterMixin extends Block {
         setDefaultState(new_this.getDefaultState().withIfExists(DistanceToShore.DISTANCE_TO_SHORE, 15));  // withIfExists
     }
 
-//    @Override
-//    public void modifyPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
-//
-//    }
-
     @Inject(at = @At("RETURN"), method = "getFluidState", cancellable = true)
     public void getFluidState(BlockState state, CallbackInfoReturnable<FluidState> cir) {
         cir.setReturnValue(cir.getReturnValue().with(DistanceToShore.DISTANCE_TO_SHORE, state.get(DistanceToShore.DISTANCE_TO_SHORE)));
-//        cir.setReturnValue(cir.getReturnValue().withIfExists(DistanceToShore.DISTANCE_TO_SHORE, 1));
-//        cir.setReturnValue(cir.getReturnValue().withIfExists(LEVEL, 1));
     }
 
 
@@ -91,15 +72,8 @@ public class WaterMixin extends Block {
 
 
 
-
-
-//    @Inject(at = @At("RETURN"), method = "getCollisionShape", cancellable = true)
-//    public void getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-//        cir.setReturnValue(VoxelShapes.fullCube());
-//    }
-
     @Inject(at = @At("RETURN"), method = "getOutlineShape", cancellable = true)
     public void getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        cir.setReturnValue(VoxelShapes.cuboid(0.125D, 0.125D, 0.125D, 1.0D, 1.0D, 1.0D));
+        cir.setReturnValue(VoxelShapes.cuboid(0.25D, 0.25D, 0.25D, 0.75D, 0.75D, 0.75D));
     }
 }
